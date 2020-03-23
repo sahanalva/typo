@@ -1,0 +1,67 @@
+Using the default profile...
+Feature: Create Blog
+  As an author
+  In order to gift my thoughts to the world
+  I want to create a blog
+
+  Scenario: Create blog page shown      # features/create_blog.feature:6
+    Given I am on the home page         # features/step_definitions/web_steps.rb:68
+    Then I should see "Welcome"         # features/step_definitions/web_steps.rb:136
+    And I should see "My Shiny Weblog!" # features/step_definitions/web_steps.rb:136
+
+  Scenario: Create blog page not shown when blog created # features/create_blog.feature:11
+    Given the blog is set up                             # features/step_definitions/web_steps.rb:34
+    When I am on the home page                           # features/step_definitions/web_steps.rb:68
+    Then I should not see "My Shiny Weblog!"             # features/step_definitions/web_steps.rb:154
+    And I should see "Teh Blag"                          # features/step_definitions/web_steps.rb:136
+
+Feature: Create Category
+  As a blog administrator
+  In order to categorize my articles
+  I want to be able to create categories to my blog
+
+  Background:                            # features/create_category.feature:6
+    Given the blog is set up             # features/step_definitions/web_steps.rb:34
+    And I am logged into the admin panel # features/step_definitions/web_steps.rb:46
+    When I follow "Categories"           # features/step_definitions/web_steps.rb:80
+
+  Scenario: Create Category                                     # features/create_category.feature:11
+    Given I am on the new categories page                       # features/step_definitions/web_steps.rb:68
+    And I fill in "category_name" with "test"                   # features/step_definitions/web_steps.rb:84
+    And I fill in "category_keywords" with "testkey"            # features/step_definitions/web_steps.rb:84
+    And I fill in "category_description" with "testdescription" # features/step_definitions/web_steps.rb:84
+    And I press "Save"                                          # features/step_definitions/web_steps.rb:76
+    Then I should see "test"                                    # features/step_definitions/web_steps.rb:136
+
+  Scenario: Edit Category                                    # features/create_category.feature:19
+    Given a test category is created                         # features/step_definitions/web_steps.rb:109
+    And I am on the category edit page for "test"            # features/step_definitions/web_steps.rb:68
+    And I fill in "category_keywords" with "test2"           # features/step_definitions/web_steps.rb:84
+    And I fill in "category_description" with "description2" # features/step_definitions/web_steps.rb:84
+    And I press "Save"                                       # features/step_definitions/web_steps.rb:76
+    Then I should see "test2"                                # features/step_definitions/web_steps.rb:136
+    Then I should see "description2"                         # features/step_definitions/web_steps.rb:136
+
+Feature: Write Articles
+  As a blog administrator
+  In order to share my thoughts with the world
+  I want to be able to add articles to my blog
+
+  Background:                            # features/write_article.feature:6
+    Given the blog is set up             # features/step_definitions/web_steps.rb:34
+    And I am logged into the admin panel # features/step_definitions/web_steps.rb:46
+
+  Scenario: Successfully write articles                                  # features/write_article.feature:10
+    Given I am on the new article page                                   # features/step_definitions/web_steps.rb:68
+    When I fill in "article_title" with "Foobar"                         # features/step_definitions/web_steps.rb:84
+    And I fill in "article__body_and_extended_editor" with "Lorem Ipsum" # features/step_definitions/web_steps.rb:84
+    And I press "Publish"                                                # features/step_definitions/web_steps.rb:76
+    Then I should be on the admin content page                           # features/step_definitions/web_steps.rb:261
+    When I go to the home page                                           # features/step_definitions/web_steps.rb:72
+    Then I should see "Foobar"                                           # features/step_definitions/web_steps.rb:136
+    When I follow "Foobar"                                               # features/step_definitions/web_steps.rb:80
+    Then I should see "Lorem Ipsum"                                      # features/step_definitions/web_steps.rb:136
+
+5 scenarios (5 passed)
+37 steps (37 passed)
+0m1.810s
